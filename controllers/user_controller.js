@@ -11,7 +11,7 @@ export const createUser = CatchAsyncError(async (req, res, next) => {
       return next(new ErrorHandler("Email already exist", 400));
     }
 
-    const userBody = { email, password };
+    const userBody = { email: email.trim(), password: password.trim() };
     const user = await UserModel.create({ ...userBody });
     res.status(201).json({
       success: true,
@@ -74,7 +74,9 @@ export const deleteUserById = CatchAsyncError(async (req, res, next) => {
 export const loginUser = CatchAsyncError(async (req, res, next) => {
   try {
     const { email, password } = req.body;
-    const user = await UserModel.findOne({ email });
+    const user = await UserModel.findOne({
+      email: new RegExp(`^${email}$`, "i"),
+    });
 
     if (!user) {
       return next(new ErrorHandler("Wrong Email or Password is entered", 400));
@@ -85,6 +87,7 @@ export const loginUser = CatchAsyncError(async (req, res, next) => {
     res.status(200).json({
       success: true,
       token,
+      user,
     });
   } catch (error) {
     return next(new ErrorHandler(error.message, 500));
