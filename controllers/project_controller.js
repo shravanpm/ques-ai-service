@@ -15,7 +15,6 @@ export const createProject = CatchAsyncError(async (req, res, next) => {
       return next(new ErrorHandler("Name already exist", 400));
     }
     const payload = { name: name.trim(), user: userId };
-    console.log({ payload });
     const project = await ProjectModel.create(payload);
     res.status(201).json({
       success: true,

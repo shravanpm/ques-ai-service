@@ -61,16 +61,21 @@ export const deleteFileById = CatchAsyncError(async (req, res, next) => {
 export const editFileById = CatchAsyncError(async (req, res, next) => {
   // TODO
   try {
+    const { transcript } = req.body;
     const fileId = req.params.id;
-    const file = await FileModel.findById(fileId).exec();
-
+    const file = await FileModel.findById(fileId);
     if (!file) {
       return next(new ErrorHandler("File not found", 404));
     }
+    const updatedFile = await FileModel.findByIdAndUpdate(
+      fileId,
+      { transcript },
+      { new: true }
+    );
 
     res.status(200).json({
       success: true,
-      file,
+      file: updatedFile,
     });
   } catch (error) {
     return next(new ErrorHandler(error.message, 500));
