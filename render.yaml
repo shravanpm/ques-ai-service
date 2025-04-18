@@ -1,0 +1,14 @@
+services:
+  my-express-app:
+    type: web-service
+    env: production
+    git:
+      repo: https://github.com/shravanpm/goodwill-service.git
+      branch: main # or your desired branch
+    limits:
+      concurrency: 100 # Adjust as needed
+    health_check:
+      path: /health # Replace with your health check endpoint
+    routes:
+      - path: "/"
+        method: "*"

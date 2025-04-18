@@ -34,8 +34,7 @@ export const authenticate = CatchAsyncError(async (req, res, next) => {
       new ErrorHandler("Authorization token not found or incorrect", 401)
     );
   }
-
-  req.user = decoded.user;
+  req.user = decoded;
 
   return next();
 });
